@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Typing Speed Checker Pro</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+    <div class="container">
+
+
+        <h1>⌨️ Typing Speed Checker</h1>
+
+        <div class="controls">
+
+            <label for="difficulty">Difficulty:</label>
+
+            <select id="difficulty" onchange="loadParagraph()">
+                <option value="easy">Easy</option>
+                <option value="medium">Medium</option>
+                <option value="hard">Hard</option>
+            </select>
+
+            <label for="duration">Timer:</label>
+
+            <select id="duration">
+                <option value="60">1 Minute</option>
+                <option value="120">2 Minutes</option>
+            </select>
+
+            <button onclick="startTest()">Start Test</button>
+
+            <button onclick="checkResult()">Submit Test</button>
+
+            <button onclick="resetTest()">Reset</button>
+
+        </div>
+
+        <h2 id="timer">⏳ Time Left: 60 sec</h2>
+
+        <div id="paragraph-display"></div>
+
+        <textarea id="typingInput" placeholder="Start typing here..." spellcheck="false"></textarea>
+
+        <div id="result"></div>
+
+
+    </div>
+
+    <script>
+
+        const paragraphs = {
+
+            easy: [
+                "The sun rises in the east and sets in the west.",
+                "Python is easy to learn and fun to use.",
+                "Practice every day to improve typing speed.",
+                "Typing every day improves speed and accuracy."
+            ],
+
+            medium: [
+                "Artificial intelligence is changing the way people interact with technology.",
+                "Typing speed and accuracy are important skills for students and professionals.",
+                "Cloud computing allows data storage and access from anywhere.",
+                "Learning programming requires patience and consistent practice."
+            ],
+
+            hard: [
+                "Machine learning algorithms analyze complex datasets to generate predictions and valuable insights.",
+                "Cybersecurity professionals continuously monitor systems to prevent threats and protect information.",
+                "Modern software development involves collaboration version control testing and deployment."
+            ]
+
+        };
+
+        let currentParagraph = "";
+        let timer;
+        let timeLeft = 60;
+        let startTime = 0;
+        let correctedErrors = 0;
+
+        function loadParagraph() {
+
+            let level =
+                document.getElementById("difficulty").value;
+
+            currentParagraph =
+                paragraphs[level][Math.floor(Math.random() * paragraphs[level].length)];
+
+            document.getElementById("paragraph-display").innerHTML =
+                currentParagraph
+                    .split("")
+                    .map(char => `<span>${char}</span>`)
+                    .join("");
+
+        }
+
+        function startTest() {
+
+            clearInterval(timer);
+
+            correctedErrors = 0;
+
+            document.getElementById("typingInput").value = "";
+
+            document.getElementById("result").innerHTML = "";
+
+            loadParagraph();
+
+            timeLeft =
+                parseInt(document.getElementById("duration").value);
+
+            document.getElementById("timer").innerText =
+                "⏳ Time Left: " + timeLeft + " sec";
+
+            startTime = new Date().getTime();
+
+            timer = setInterval(() => {
+
+                timeLeft--;
+
+                document.getElementById("timer").innerText =
+                    "⏳ Time Left: " + timeLeft + " sec";
+
+                if (timeLeft <= 0) {
+
+                    clearInterval(timer);
+
+                    checkResult();
+
+                }
+
+            }, 1000);
+
+        }
+
+        document.getElementById("typingInput")
+            .addEventListener("keydown", function (e) {
+
+                if (e.key === "Backspace") {
+                    correctedErrors++;
+                }
+
+            });
+
+        document.getElementById("typingInput")
+            .addEventListener("input", function () {
+
+                let typed = this.value;
+
+                let spans =
+                    document.querySelectorAll("#paragraph-display span");
+
+                spans.forEach((span, index) => {
+
+                    span.classList.remove("correct", "incorrect");
+
+                    if (index < typed.length) {
+
+                        if (typed[index] === currentParagraph[index]) {
+
+                            span.classList.add("correct");
+
+                        } else {
+
+                            span.classList.add("incorrect");
+
+                        }
+
+                    }
+
+                });
+
+            });
+
+        function checkResult() {
+
+            if (startTime === 0) {
+                alert("Click Start Test first!");
+                return;
+            }
+
+            clearInterval(timer);
+
+            let typed =
+                document.getElementById("typingInput").value;
+
+            let elapsed =
+                (new Date().getTime() - startTime) / 1000 / 60;
+
+            let words =
+                typed.trim().split(/\s+/).filter(Boolean).length;
+
+            let wpm =
+                elapsed > 0 ? Math.round(words / elapsed) : 0;
+
+            let correct = 0;
+            let errors = 0;
+
+            for (let i = 0; i < typed.length; i++) {
+
+                if (typed[i] === currentParagraph[i]) {
+
+                    correct++;
+
+                } else {
+
+                    errors++;
+
+                }
+
+            }
+
+            let accuracy =
+                Math.round((correct / currentParagraph.length) * 100);
+
+            document.getElementById("result").innerHTML = `
+        <div class="card">
+            <h2>📊 Results</h2>
+
+            <p>⚡ WPM: <b>${wpm}</b></p>
+
+            <p>🎯 Accuracy: <b>${accuracy}%</b></p>
+
+            <p>❌ Errors: <b>${errors}</b></p>
+
+            <p>✅ Corrected Errors: <b>${correctedErrors}</b></p>
+        </div>
+    `;
+
+        }
+
+        function resetTest() {
+
+            clearInterval(timer);
+
+            startTime = 0;
+
+            document.getElementById("typingInput").value = "";
+
+            document.getElementById("result").innerHTML = "";
+
+            document.getElementById("timer").innerText =
+                "⏳ Time Left: 60 sec";
+
+            loadParagraph();
+
+        }
+
+        window.onload = loadParagraph;
+
+    </script>
+
+</body>
+
+</html>

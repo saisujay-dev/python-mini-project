@@ -1,0 +1,104 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #0f172a;
+    color: white;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.container {
+    width: 90%;
+    max-width: 900px;
+    background: #29437a;
+    padding: 30px;
+    border-radius: 15px;
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.controls {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+select,
+button {
+    padding: 10px;
+    margin: 5px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+button {
+    background: #2563eb;
+    color: white;
+}
+
+button:hover {
+    background: #1d4ed8;
+}
+
+#timer {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+#paragraph-display {
+    background: #1f2937;
+    color: rgba(255, 255, 255, 0.5);
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 15px;
+    line-height: 1.8;
+    font-size: 20px;
+}
+
+#typingInput {
+    width: 100%;
+    height: 150px;
+    padding: 15px;
+    font-size: 18px;
+    border-radius: 10px;
+    border: none;
+    resize: none;
+}
+
+#result {
+    margin-top: 20px;
+}
+
+.card {
+    background: #3a506f;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.card h2 {
+    margin-bottom: 10px;
+}
+
+.card p {
+    margin: 8px 0;
+}
+
+.correct {
+    color: #22c55e;
+    font-weight: bold;
+}
+
+.incorrect {
+    color: #ef4444;
+    font-weight: bold;
+}

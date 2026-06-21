@@ -1,0 +1,20 @@
+﻿# Python
+__pycache__/
+*.py[cod]
+*.so
+*.pyd
+*.pyc
+*.pyo
+*~
+.env
+.env.*
+venv/
+ENV/
+.venv/
+# Flask
+instance/
+.webassets-cache
+# VS Code
+.vscode/
+# Windows
+Thumbs.db
